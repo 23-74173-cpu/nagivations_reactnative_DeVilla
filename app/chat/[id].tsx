@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -45,20 +46,54 @@ const MOCK_MESSAGES: Record<
   ],
 };
 
+function formatTime(): string {
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes().toString().padStart(2, '0');
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = h % 12 || 12;
+  return `${h12}:${m} ${ampm}`;
+}
+
 export default function ChatRoomScreen() {
   const { id } = useLocalSearchParams();
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
+  const listRef = useRef<FlatList>(null);
   const [input, setInput] = useState('');
 
   const docId = typeof id === 'string' ? id : '';
   const doc = DOCS.find((d) => d.id === docId);
-  const messages = MOCK_MESSAGES[docId] ?? [];
+  const initial = MOCK_MESSAGES[docId] ?? [];
+  const [messages, setMessages] = useState(initial);
+
+  const messageCounterRef = useRef(messages.length);
 
   useEffect(() => {
     navigation.setOptions({ title: doc?.name ?? 'Chat' });
   }, [doc?.name, navigation]);
+
+  useEffect(() => {
+    const next = MOCK_MESSAGES[docId] ?? [];
+    setMessages(next);
+    messageCounterRef.current = next.length;
+  }, [docId]);
+
+  const sendMessage = useCallback(() => {
+    const text = input.trim();
+    if (!text) return;
+    messageCounterRef.current += 1;
+    const newMsg = {
+      id: `user-${messageCounterRef.current}`,
+      text,
+      time: formatTime(),
+      isUser: true,
+    };
+    setMessages((prev) => [...prev, newMsg]);
+    setInput('');
+    setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 50);
+  }, [input]);
 
   return (
     <KeyboardAvoidingView
@@ -68,6 +103,7 @@ export default function ChatRoomScreen() {
     >
       <ThemedView style={styles.container}>
         <FlatList
+          ref={listRef}
           data={messages}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
@@ -118,8 +154,12 @@ export default function ChatRoomScreen() {
             placeholderTextColor={colors.icon}
             value={input}
             onChangeText={setInput}
+            onSubmitEditing={sendMessage}
+            returnKeyType="send"
           />
-          <Ionicons name="send" size={24} color={colors.tint} style={styles.sendIcon} />
+          <Pressable onPress={sendMessage}>
+            <Ionicons name="send" size={24} color={colors.tint} style={styles.sendIcon} />
+          </Pressable>
         </View>
       </ThemedView>
     </KeyboardAvoidingView>
