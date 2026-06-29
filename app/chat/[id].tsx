@@ -26,20 +26,22 @@ const MOCK_MESSAGES: Record<
   { id: string; text: string; time: string; isUser: boolean }[]
 > = {
   'doc-calvin': [
-    { id: 'c1', text: 'Hello Doc Calvin!', time: '9:30 AM', isUser: true },
-    { id: 'c2', text: 'Hi! How can I help you?', time: '9:31 AM', isUser: false },
-    { id: 'c3', text: 'I wanted to discuss the patient report.', time: '9:32 AM', isUser: true },
-    { id: 'c4', text: 'Sure, I have it ready.', time: '9:33 AM', isUser: false },
+    { id: 'c1', text: 'Doc, na review mo na ba yung report?', time: '9:38 AM', isUser: true },
+    { id: 'c2', text: 'Oo, medyo marami pa tayong kailangan baguhin.', time: '9:39 AM', isUser: false },
+    { id: 'c3', text: 'Sige, anong mga dapat i-update?', time: '9:40 AM', isUser: true },
+    { id: 'c4', text: 'Ayan, mas mabuti para mabilis natin ma finalize.', time: '9:41 AM', isUser: false },
   ],
   'doc-harrold': [
-    { id: 'h1', text: 'Good morning!', time: '8:00 AM', isUser: true },
-    { id: 'h2', text: 'Morning! Did you review the MRI results?', time: '8:05 AM', isUser: false },
-    { id: 'h3', text: 'Yes, I did. Looks good overall.', time: '8:10 AM', isUser: true },
+    { id: 'h1', text: 'Doc Harrold, na receive mo ba yung file?', time: '10:12 AM', isUser: true },
+    { id: 'h2', text: 'Oo, pero may need pang konting revisions.', time: '10:13 AM', isUser: false },
+    { id: 'h3', text: 'Sige, send ko nalang yung updated version.', time: '10:14 AM', isUser: true },
+    { id: 'h4', text: 'Sige, isend mo nalang sa email ko yung draft.', time: '10:15 AM', isUser: false },
   ],
   'doc-oliver': [
-    { id: 'o1', text: 'Are we still on for tomorrow?', time: '7:45 PM', isUser: true },
-    { id: 'o2', text: 'Yes, see you at 10 AM.', time: '7:46 PM', isUser: false },
-    { id: 'o3', text: "Perfect, I'll prepare the documents.", time: '7:47 PM', isUser: true },
+    { id: 'o1', text: 'Doc Oliver, tuloy ba yung meeting mamaya?', time: '3:17 PM', isUser: true },
+    { id: 'o2', text: 'Sorry, may emergency ako. Cancel muna.', time: '3:18 PM', isUser: false },
+    { id: 'o3', text: 'Sige, kelan tayo pwede mag reschedule?', time: '3:19 PM', isUser: true },
+    { id: 'o4', text: 'Naka leave ako bukas, sa webes na natin ituloy.', time: '3:20 PM', isUser: false },
   ],
 };
 
