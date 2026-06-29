@@ -1,98 +1,151 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
-export default function HomeScreen() {
+const CHATS = [
+  {
+    id: 'doc-calvin',
+    name: 'Doc Calvin',
+    lastMessage: 'See you at the clinic tomorrow.',
+    lastMessageTime: '9:41 AM',
+  },
+  {
+    id: 'doc-harrold',
+    name: 'Doc Harrold',
+    lastMessage: 'Your lab results are ready.',
+    lastMessageTime: 'Yesterday',
+  },
+  {
+    id: 'doc-oliver',
+    name: 'Doc Oliver',
+    lastMessage: "Don't forget your appointment on Friday.",
+    lastMessageTime: 'Yesterday',
+  },
+];
+
+export default function ChatsScreen() {
+  const [search, setSearch] = useState('');
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme ?? 'light'];
+
+  const filtered = CHATS.filter((chat) =>
+    chat.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <ThemedView style={styles.container}>
+      <View style={styles.searchContainer}>
+        <Ionicons name="search-outline" size={20} color={colors.icon} />
+        <TextInput
+          style={[
+            styles.searchInput,
+            { color: colors.text, backgroundColor: colorScheme === 'dark' ? '#1c1c1e' : '#f0f0f0' },
+          ]}
+          placeholder="Search chats..."
+          placeholderTextColor={colors.icon}
+          value={search}
+          onChangeText={setSearch}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      </View>
+      <FlatList
+        data={filtered}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Pressable
+            style={({ pressed }) => [
+              styles.chatItem,
+              pressed && (colorScheme === 'dark' ? styles.pressedDark : styles.pressedLight),
+            ]}
+            onPress={() => router.push(`/chat/${item.id}`)}
+          >
+            <View style={[styles.avatar, { backgroundColor: colors.tint }]}>
+              <ThemedText style={styles.avatarText}>
+                {item.name
+                  .split(' ')
+                  .map((n) => n[0])
+                  .join('')}
+              </ThemedText>
+            </View>
+            <View style={styles.chatInfo}>
+              <View style={styles.chatHeader}>
+                <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
+                <ThemedText style={styles.timeText}>{item.lastMessageTime}</ThemedText>
+              </View>
+              <ThemedText style={styles.preview} numberOfLines={1}>
+                {item.lastMessage}
+              </ThemedText>
+            </View>
+          </Pressable>
+        )}
+      />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+  },
+  searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  searchInput: {
+    flex: 1,
+    height: 40,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    fontSize: 16,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  chatItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    gap: 12,
+  },
+  avatar: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  chatInfo: {
+    flex: 1,
+  },
+  chatHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  timeText: {
+    fontSize: 13,
+    opacity: 0.6,
+  },
+  preview: {
+    fontSize: 14,
+    opacity: 0.7,
+    marginTop: 2,
+  },
+  pressedLight: {
+    backgroundColor: '#e8e8e8',
+  },
+  pressedDark: {
+    backgroundColor: '#2c2c2e',
   },
 });
