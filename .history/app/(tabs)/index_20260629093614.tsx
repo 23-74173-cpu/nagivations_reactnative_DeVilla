@@ -1,7 +1,7 @@
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -12,19 +12,19 @@ const CHATS = [
   {
     id: 'doc-calvin',
     name: 'Doc Calvin',
-    lastMessage: 'Ayan, mas mabuti para mabilis natin ma finalize.',
+    lastMessage: 'See you at the clinic tomorrow.',
     lastMessageTime: '9:41 AM',
   },
   {
     id: 'doc-harrold',
     name: 'Doc Harrold',
-    lastMessage: 'Sige, isend mo nalang sa email ko yung draft.',
+    lastMessage: 'Your lab results are ready.',
     lastMessageTime: 'Yesterday',
   },
   {
     id: 'doc-oliver',
     name: 'Doc Oliver',
-    lastMessage: "Naka leave ako bukas, sa webes na natin ituloy.",
+    lastMessage: "Don't forget your appointment on Friday.",
     lastMessageTime: 'Yesterday',
   },
 ];

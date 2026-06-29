@@ -1,8 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { Colors } from '@/constants/theme';
@@ -39,6 +39,17 @@ export default function TabLayout() {
             <Ionicons name="chatbubble-outline" size={size} color={color} />
           ),
           headerTitle: 'Chats',
+          headerLeft: () => <MenuButton />,
+        }}
+      />
+      <Tabs.Screen
+        name="explore"
+        options={{
+          title: 'Explore',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="compass-outline" size={size} color={color} />
+          ),
+          headerTitle: 'Explore',
           headerLeft: () => <MenuButton />,
         }}
       />
