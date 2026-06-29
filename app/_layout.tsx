@@ -3,6 +3,7 @@ import 'react-native-reanimated';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
+import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -20,6 +21,9 @@ export default function RootLayout() {
               drawerLabel: 'Home',
               title: 'Navigations',
               headerShown: false,
+              drawerIcon: ({ color, size }) => (
+                <Ionicons name="home-outline" size={size} color={color} />
+              ),
             }}
           />
           <Drawer.Screen
@@ -27,6 +31,9 @@ export default function RootLayout() {
             options={{
               drawerLabel: 'Settings',
               title: 'Settings',
+              drawerIcon: ({ color, size }) => (
+                <Ionicons name="settings-outline" size={size} color={color} />
+              ),
             }}
           />
           <Drawer.Screen
