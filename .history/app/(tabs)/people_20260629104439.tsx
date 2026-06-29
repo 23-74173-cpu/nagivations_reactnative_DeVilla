@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { FlatList, StyleSheet, TextInput, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -50,7 +50,7 @@ export default function PeopleScreen() {
                 colorScheme === 'dark' ? '#1c1c1e' : '#f0f0f0',
             },
           ]}
-          placeholder="Search by name..."
+          placeholder="Search by name or specialization..."
           placeholderTextColor={colors.icon}
           value={search}
           onChangeText={setSearch}
